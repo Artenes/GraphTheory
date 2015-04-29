@@ -1,5 +1,7 @@
 package graph.adjacencymatrix;
 
+import java.util.Iterator;
+
 import graph.Graph;
 import graph.IndexedVertex;
 import graph.Vertex;
@@ -73,4 +75,69 @@ public class AdjacecyMatrixGraph<T> implements Graph<T> {
 	public boolean edgeExists(Vertex<T> u, Vertex<T> v) {
 		return edgeExists(((IndexedVertex<T>)u).index(), ((IndexedVertex<T>)v).index());
 	}
+	
+	public Iterable<Vertex<T>> vertices() {
+		return new VertexIterator();
+	}
+	
+	public Iterable<Vertex<T>> adjacentVertices(int u){
+		return new AdjacentVertexIterator(u);
+	}
+	
+	public class VertexIterator implements Iterator<Vertex<T>>, Iterable<Vertex<T>> {
+
+		protected int lastVisited;
+		
+		public VertexIterator() {
+			lastVisited = -1;
+		}
+		
+		@Override
+		public Iterator<Vertex<T>> iterator() {
+			return this;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return lastVisited < numberOfVertices - 1;
+		}
+
+		@Override
+		public Vertex<T> next() {
+			return vertices[++lastVisited];
+		}
+		
+	}
+	
+	public class AdjacentVertexIterator implements Iterator<Vertex<T>>, Iterable<Vertex<T>> {
+
+		protected int current;
+		protected int u;
+		
+		public AdjacentVertexIterator(int u) {
+			this.u = u;
+			current = -1;
+		}
+		
+		@Override
+		public Iterator<Vertex<T>> iterator() {
+			return this;
+		}
+
+		@Override
+		public boolean hasNext() {
+			int v = current + 1;
+			while(v < numberOfVertices && !edgeExists(u, v))
+				v++;
+			return v < numberOfVertices;
+		}
+
+		@Override
+		public Vertex<T> next() {
+			current++;
+			while(!edgeExists(u, current))
+				current++;
+			return vertices[current];
+		}	
+	}	
 }
