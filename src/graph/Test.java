@@ -10,7 +10,11 @@ public class Test {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		System.out.println("Grafo com lista de adjacência:");
+		
+		System.out.println();
+		System.out.println("*******************************************************");
+		System.out.println("GRAFO NÃO PONDERADO REPRESENTADO COM LISTA DE ADJACÊNCIA");
+		System.out.println("*******************************************************");
 		//Criando um grafo
 		AdjacencyListGraph<Integer> g = new AdjacencyListGraph<Integer>(5, true);
 		
@@ -37,7 +41,10 @@ public class Test {
 			}
 		}
 		
-		System.out.println("\nGrafo com matriz de adjacência:");
+		System.out.println();
+		System.out.println("*******************************************************");
+		System.out.println("GRAFO NÃO PONDERADO REPRESENTADO COM MATRIZ DE ADJACÊNCIA");
+		System.out.println("*******************************************************");
 		//Criando um outro grafo
 		AdjacecyMatrixGraph<Integer> m = new AdjacecyMatrixGraph<Integer>(5, true);
 		
@@ -64,7 +71,10 @@ public class Test {
 			}
 		}
 		
-		System.out.println("\nGrafo ponderado com matriz de adjacência:");
+		System.out.println();
+		System.out.println("*******************************************************");
+		System.out.println("GRAFO PONDERADO REPRESENTADO COM MATRIZ DE ADJACÊNCIA");
+		System.out.println("*******************************************************");
 		//Criando um outro grafo
 		WeightedAdjacencyMatrixGraph<Integer> pm = new WeightedAdjacencyMatrixGraph<Integer>(5, true);
 		
@@ -88,6 +98,41 @@ public class Test {
 			System.out.println(vertice.getElement());
 			for (Vertex<Integer> verticeAdjacente : pm.adjacentVertices(((IndexedVertex<Integer>)vertice).index)) {
 				System.out.println("   ("+pm.edgeWeight(vertice, verticeAdjacente)+")->" + verticeAdjacente.getElement());
+			}
+		}
+		
+		System.out.println();
+		System.out.println("*******************************************************");
+		System.out.println("GRAFO NÃO PONDERADO GERADO POR ARQUIVO");
+		System.out.println("*******************************************************");
+		AdjacecyMatrixGraph<Integer> grafo = null;
+		try {
+			grafo = AdjacecyMatrixGraph.createGraphFromFile("GrafoMatriz.txt", true);
+		} catch (Exception e) {
+			e.printStackTrace(System.out);
+		}
+		
+		for (Vertex<Integer> vertice : grafo.vertices()) {
+			System.out.println(vertice.getElement());
+			for (Vertex<Integer> verticeAdjacente : grafo.adjacentVertices(((IndexedVertex<Integer>)vertice).index)) {
+				System.out.println("   ->" + verticeAdjacente.getElement());
+			}
+		}
+		
+		System.out.println();
+		System.out.println("*******************************************************");
+		System.out.println("GRAFO PONDERADO GERADO POR ARQUIVO");
+		System.out.println("*******************************************************");
+		WeightedAdjacencyMatrixGraph<Integer> grafoPond = null;
+		try {
+			grafoPond = WeightedAdjacencyMatrixGraph.createGraphFromFile("GrafoMatrizPonderado.txt", true);
+		} catch (Exception e) {
+			e.printStackTrace(System.out);
+		}
+		for (Vertex<Integer> vertice : grafoPond.vertices()) {
+			System.out.println(vertice.getElement());
+			for (Vertex<Integer> verticeAdjacente : grafoPond.adjacentVertices(((IndexedVertex<Integer>)vertice).index)) {
+				System.out.println("   ("+grafoPond.edgeWeight(vertice, verticeAdjacente)+")->" + verticeAdjacente.getElement());
 			}
 		}
 	}
