@@ -4,6 +4,9 @@ import graph.adjacencylist.AdjacencyListGraph;
 import graph.adjacencymatrix.AdjacecyMatrixGraph;
 import graph.adjacencymatrix.WeightedAdjacencyMatrixGraph;
 
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+
 public class Test {
 
 	/**
@@ -18,7 +21,7 @@ public class Test {
 		//Criando um grafo
 		AdjacencyListGraph<Integer> g = new AdjacencyListGraph<Integer>(5, true);
 		
-		//Adicionando os vÃ©rtices
+		//Adicionando os vértices
 		g.addVertex("0", 0);
 		g.addVertex("1", 1);
 		g.addVertex("2", 2);
@@ -33,13 +36,8 @@ public class Test {
 		g.addEdge(3, 2);
 		g.addEdge(4, 4);
 		
-		//Imprimir vÃ©rtices adjacentes
-		for (Vertex<Integer> vertice : g.vertices()) {
-			System.out.println(vertice.getElement());
-			for (Vertex<Integer> verticeAdjacente : g.adjacentVertices(vertice)) {
-				System.out.println("   ->" + verticeAdjacente.getElement());
-			}
-		}
+		//Imprimir vértices adjacentes
+		System.out.println(g);
 		
 		System.out.println();
 		System.out.println("*******************************************************");
@@ -63,20 +61,15 @@ public class Test {
 		m.addEdge(3, 2);
 		m.addEdge(4, 4);
 		
-		//Imprimir vÃ©rtices adjacentes
-		for (Vertex<Integer> vertice : m.vertices()) {
-			System.out.println(vertice.getElement());
-			for (Vertex<Integer> verticeAdjacente : m.adjacentVertices(((IndexedVertex<Integer>)vertice).index)) {
-				System.out.println("   ->" + verticeAdjacente.getElement());
-			}
-		}
+		//Imprimir vértices adjacentes
+		System.out.println(m);
 		
 		System.out.println();
 		System.out.println("*******************************************************");
 		System.out.println("GRAFO PONDERADO REPRESENTADO COM MATRIZ DE ADJACÊNCIA");
 		System.out.println("*******************************************************");
 		//Criando um outro grafo
-		WeightedAdjacencyMatrixGraph<Integer> pm = new WeightedAdjacencyMatrixGraph<Integer>(5, true);
+		WeightedAdjacencyMatrixGraph<Integer> pm = new WeightedAdjacencyMatrixGraph<Integer>(5, false);
 		
 		//Adicionando outros vertices
 		pm.addVertex("0", 0);
@@ -94,12 +87,7 @@ public class Test {
 		pm.addEdge(4, 4, 66);
 		
 		//Imprimir vértices adjacentes
-		for (Vertex<Integer> vertice : pm.vertices()) {
-			System.out.println(vertice.getElement());
-			for (Vertex<Integer> verticeAdjacente : pm.adjacentVertices(((IndexedVertex<Integer>)vertice).index)) {
-				System.out.println("   ("+pm.edgeWeight(vertice, verticeAdjacente)+")->" + verticeAdjacente.getElement());
-			}
-		}
+		System.out.println(pm);
 		
 		System.out.println();
 		System.out.println("*******************************************************");
@@ -111,13 +99,17 @@ public class Test {
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
 		}
+		System.out.println(grafo);
 		
-		for (Vertex<Integer> vertice : grafo.vertices()) {
-			System.out.println(vertice.getElement());
-			for (Vertex<Integer> verticeAdjacente : grafo.adjacentVertices(((IndexedVertex<Integer>)vertice).index)) {
-				System.out.println("   ->" + verticeAdjacente.getElement());
-			}
+		//*********************************
+		//*****Exportando arquivo dot******
+		//*********************************
+		try {
+			grafo.exportToDotFile("GrafoNaoPonderado.txt");
+		} catch (FileNotFoundException | UnsupportedEncodingException erro) {
+			erro.printStackTrace();
 		}
+		
 		
 		System.out.println();
 		System.out.println("*******************************************************");
@@ -129,11 +121,15 @@ public class Test {
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
 		}
-		for (Vertex<Integer> vertice : grafoPond.vertices()) {
-			System.out.println(vertice.getElement());
-			for (Vertex<Integer> verticeAdjacente : grafoPond.adjacentVertices(((IndexedVertex<Integer>)vertice).index)) {
-				System.out.println("   ("+grafoPond.edgeWeight(vertice, verticeAdjacente)+")->" + verticeAdjacente.getElement());
-			}
+		System.out.println(grafoPond);
+		
+		//*********************************
+		//*****Exportando arquivo dot******
+		//*********************************
+		try {
+			grafoPond.exportToDotFile("GrafoPonderado.txt");
+		} catch (FileNotFoundException | UnsupportedEncodingException erro) {
+			erro.printStackTrace();
 		}
 	}
 }

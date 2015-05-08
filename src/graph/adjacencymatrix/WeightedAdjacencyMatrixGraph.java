@@ -97,4 +97,19 @@ public class WeightedAdjacencyMatrixGraph<T> extends AdjacecyMatrixGraph<T> {
 		return graph;		
 	}
 	
+	@Override
+	public String toString() {
+		String resultado = this.directed ? "digraph Grafo {\n" : "graph Grafo {\n";
+		String aresta = this.directed ? " -> " : " -- ";
+		
+		for (Vertex<T> vertice : this.vertices()) {
+			for (Vertex<T> verticeAdjacente : this.adjacentVertices(((IndexedVertex<T>)vertice).index())) {
+				resultado += "\t" + vertice.getName() + aresta + verticeAdjacente.getName() + "[label=\"" + this.edgeWeight(vertice, verticeAdjacente) + "\"];\n";
+			}
+		}
+		
+		resultado += "}";
+		return resultado;
+	}
+	
 }

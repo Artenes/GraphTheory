@@ -1,13 +1,17 @@
 package graph.adjacencymatrix;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Iterator;
-
 import graph.Graph;
 import graph.IndexedVertex;
 import graph.Vertex;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.Iterator;
 
 public class AdjacecyMatrixGraph<T> implements Graph<T> {
 
@@ -133,6 +137,50 @@ public class AdjacecyMatrixGraph<T> implements Graph<T> {
 		reader.close();
 		
 		return graph;		
+	}
+	
+	@Override
+	public String toString() {
+		String resultado = this.directed ? "digraph Grafo {\n" : "graph Grafo {\n";
+		String aresta = this.directed ? " -> " : " -- ";
+		
+		for (Vertex<T> vertice : this.vertices()) {
+			for (Vertex<T> verticeAdjacente : this.adjacentVertices(((IndexedVertex<T>)vertice).index())) {
+				resultado += "\t" + vertice.getName() + aresta + verticeAdjacente.getName() + ";\n";
+			}
+		}
+		
+		resultado += "}";
+		return resultado;
+	}
+	
+	public void exportToDotFile(String fileName) throws FileNotFoundException, UnsupportedEncodingException {
+		PrintWriter writer = new PrintWriter(fileName, "UTF-8");
+		writer.print(this.toString());
+		writer.close();
+		AdjacecyMatrixGraph.executeGraphViz(fileName, "Grafico" + (fileName.replace("txt", "jpg")));
+	}
+	
+	public static void executeGraphViz(String fileName, String resultFileName){
+		try {
+		      String line;
+		      Process p = Runtime.getRuntime().exec("graphviz/dot.exe -Tjpg "+fileName+" -o "+resultFileName+"");
+		      BufferedReader bri = new BufferedReader(new InputStreamReader(p.getInputStream()));
+		      BufferedReader bre = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+		      while ((line = bri.readLine()) != null) {
+		        System.out.println(line);
+		      }
+		      bri.close();
+		      while ((line = bre.readLine()) != null) {
+		        System.out.println(line);
+		      }
+		      bre.close();
+		      p.waitFor();
+		      System.out.println("Done.");
+		    }
+		    catch (Exception err) {
+		      err.printStackTrace();
+		    }
 	}
 	
 	public class VertexIterator implements Iterator<Vertex<T>>, Iterable<Vertex<T>> {
